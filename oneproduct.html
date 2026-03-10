@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DUPLO X</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <style>
+    *{
+        margin:0;
+        padding:0;
+        box-sizing:border-box;
+        font-family:'Inter',system-ui,-apple-system,sans-serif;
+    }
+    body{background:#f5f3fa;
+        color:#1a1630;
+    }
+
+    /* ---- navbar compact, sticky, fully responsive ---- */
+    .navbar {
+      display: flex; 
+      justify-content: space-between; 
+      align-items: center;
+      padding: 0.6rem 5%; 
+      background: #1E3A8A;
+      backdrop-filter: blur(16px); 
+      border-radius: 40px; 
+      margin: 0.8rem 5%;
+      box-shadow: 0 6px 20px rgba(246, 246, 248, 0.1); 
+      border: 1px solid #fff;
+      position: sticky; 
+      top: 10px; 
+      z-index: 99;
+    }
+    .logo {
+      font-size: 1.5rem; 
+      font-weight: 800;
+      background: linear-gradient(130deg, #f6f6f8, #fcfafa);
+      -webkit-background-clip: text; 
+      background-clip: text; 
+      color: transparent;
+    }
+    .nav-links { 
+      display: flex; 
+      gap: 1.5rem; 
+      font-weight: 600; 
+      flex-wrap: wrap; 
+    }
+    .nav-links a { 
+      text-decoration: none; 
+      color: #f4f4f7; 
+      font-size: 0.95rem; 
+      transition: 0.2s; 
+    }
+    .nav-links a:hover { 
+      color: #ff6a4b; 
+    }
+
+    .cart-icon {
+      background: white; 
+      padding: 0.4rem 1.2rem;
+      border-radius: 40px; 
+      font-weight: 600; 
+      font-size: 0.9rem; 
+      box-shadow: 0 4px 0 #0c0b0b;
+      white-space: nowrap;
+      cursor: pointer; /* make it clickable */
+    }
+    .cart-icon:active { 
+      transform: translateY(3px); 
+      box-shadow: 0 1px 0 #b1551d; 
+    }
+
+
+    /* ————— DETAIL section — fully responsive base (mobile-first) ————— */
+    .detail-wrap{
+      background:#f5f3fa;
+      padding:1rem 4%;
+    }
+    .detail-card{
+      max-width:1200px;
+      margin:0 auto;
+      background:white;
+      border-radius:2rem;
+      box-shadow:0 20px 30px -15px #1E3A8A;
+      display:flex;
+      flex-wrap:wrap;
+      overflow:hidden;
+    }
+    /* left : image */
+    .d-left{
+      flex:1 1 280px;
+      background:#faf9ff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:1.5rem;
+    }
+    .d-left img{
+      width:100%;
+      max-width:260px;
+      border-radius:1.5rem;
+      box-shadow:0 15px 20px -10px #1E3A8A;
+    }
+    /* right : info — ultra condensed but readable */
+    .d-right{
+      flex:2 1 350px;
+      padding:1.5rem 1.8rem;
+      background:white;
+    }
+    .badge{
+      background:#1E3A8A;
+      color:white;
+      font-size:0.7rem;
+      padding:0.2rem 0.9rem;
+      border-radius:3rem;
+      display:inline-block;
+      margin-bottom:0.5rem;
+      letter-spacing:0.3px;
+    }
+    .d-right h2{
+      font-size:2rem;
+      font-weight:800;
+      line-height:1.1;
+      margin-bottom:0.15rem;
+    }
+    .sub{
+      color:#1E3A8A;
+      font-weight:600;
+      font-size:0.9rem;
+      border-bottom:1px solid #e0daf5;
+      padding-bottom:0.6rem;
+      margin-bottom:0.8rem;
+      display:flex;
+      justify-content:space-between;
+    }
+    /* feature chips — inline wrap, very compact */
+    .chip-box{
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.4rem;
+      margin:0.8rem 0;
+    }
+    .chip{
+      background:#f0f2fa;
+      padding:0.2rem 0.9rem;
+      border-radius:2rem;
+      font-size:0.75rem;
+      font-weight:600;
+      white-space:nowrap;
+    }
+    .chip i{
+        color:#1E3A8A;
+        margin-right:4px;
+        font-size:0.7rem;
+    }
+    /* price row */
+    .price-row{
+      display:flex;
+      align-items:baseline;
+      gap:0.8rem;
+      flex-wrap:wrap;
+      margin:1rem 0 0.8rem;
+    }
+    .now{
+        font-size:2.2rem;
+        font-weight:800;
+        color:#1E3A8A;
+        line-height:1;
+    }
+    .old{
+        font-size:1.1rem;
+        color:#aaa;
+        text-decoration:line-through;
+    }
+    .save{
+        background:#ffd966;
+        padding:0.2rem 1rem;
+        border-radius:2rem;
+        font-weight:700;
+        font-size:0.75rem;
+    }
+    /* quantity + buttons */
+    .action-row{
+      display:flex;
+      flex-wrap:wrap;
+      align-items:center;
+      gap:0.8rem;
+      margin:1.2rem 0;
+    }
+    .qty{
+      display:flex;
+      align-items:center;
+      border:2px solid #1E3A8A;
+      border-radius:3rem;
+      background:white;
+    }
+    .qty button{
+      background:none;
+      border:none;
+      padding:0.3rem 1rem;
+      font-weight:700;
+      font-size:1.2rem;
+      cursor:pointer;
+      color:#1E3A8A;
+    }
+    .qty button:hover{
+        background:#1E3A8A;
+        color:white;
+    }
+    .qty span{
+        padding:0 0.5rem;
+        font-weight:600;
+        min-width:1.8rem;
+        text-align:center;
+    }
+    .btn-pri{
+      background:#1E3A8A;
+      border:none;
+      color:white;
+      padding:0.7rem 1.8rem;
+      border-radius:3rem;
+      font-weight:700;
+      font-size:0.9rem;
+      box-shadow:0 4px 0 #0c1a45;
+      cursor:pointer;
+      transition:0.05s;
+      white-space:nowrap;
+    }
+    .btn-pri:active{
+        transform:translateY(3px);
+        box-shadow:0 1px 0 #0c1a45;
+    }
+    .btn-sec{
+      background:white;
+      border:2px solid #1E3A8A;
+      color:#1E3A8A;
+      padding:0.7rem 1.5rem;
+      border-radius:3rem;
+      font-weight:700;
+      font-size:0.9rem;
+      cursor:pointer;
+      white-space:nowrap;
+    }
+    /* micro specs */
+    .spec-mini{
+      background:#faf9ff;
+      padding:1rem;
+      border-radius:1.2rem;
+      margin-top:1rem;
+      display:flex;
+      flex-wrap:wrap;
+      gap:0.5rem 1rem;
+      font-size:0.8rem;
+    }
+    .spec-mini div{
+        display:flex;
+        gap:0.8rem;
+        border-bottom:1px dashed #ccc;
+        padding:0.2rem 0;
+        flex:1 1 200px;
+    }
+    .spec-mini span:first-child{
+        font-weight:700;
+        min-width:85px;
+    }
+
+    /* ————— product grid — compact, responsive ————— */
+    .grid-wrap{
+      padding:1.5rem 4% 2rem;
+    }
+    .grid{
+      display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));
+      gap:0.8rem;
+    }
+    .card{
+      background:white;
+      border-radius:1.5rem;
+      padding:1rem 0.8rem;
+      border:1px solid #fff;
+      text-align:center;
+      box-shadow:0 10px 15px -8px #1E3A8A;
+    }
+    .card .img{
+      min-height:80px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+    }
+    .card img{
+        max-width:70px;
+        max-height:60px;
+        border-radius:8px;
+        object-fit:contain;
+    }
+    .card h3{
+        font-size:1.2rem;
+        font-weight:800;
+        background:linear-gradient(140deg,#1E3A8A,#0a0909);
+        -webkit-background-clip:text;
+        background-clip:text;
+        color:transparent;
+        margin:0.2rem 0;
+    }
+    .card .price{
+        font-size:1.4rem;
+        font-weight:800;
+        color:#2b1952;
+    }
+    .btn-sm{
+      background:white;
+      border:2px solid #1E3A8A;
+      color:#1E3A8A;
+      padding:0.3rem 1rem;
+      border-radius:2rem;
+      font-weight:700;
+      font-size:0.85rem;
+      box-shadow:0 3px 0 #cbd5e0;
+      width:100%;cursor:pointer;
+      transition:0.05s;
+    }
+    .btn-sm:active{
+        transform:translateY(3px);
+        box-shadow:0 1px 0 #a4c2e3;
+    }
+    /* ---- footer compact, responsive ---- */
+
+    .footer {
+      background: #1E3A8A; 
+      color: white; 
+      padding: 2.5rem 5% 1.5rem;
+      border-radius: 40px 40px 0 0;
+    }
+    .footer-grid { 
+      display: flex; 
+      flex-wrap: wrap; 
+      gap: 30px; 
+      justify-content: space-between; 
+    }
+    .social i { 
+      font-size: 1.5rem; 
+      background: #ced8f1; 
+      padding: 0.5rem; 
+      border-radius: 50%; 
+      color: #311d70; 
+      margin-right: 0.8rem; 
+      transition: 0.2s;
+    }
+    .social i:hover { 
+      background: #eff1f7;
+    }
+
+    /* ========== SLIDE-OUT CART PANEL (fully responsive) ========== */
+    .cart-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0,0,0,0.4);
+      backdrop-filter: blur(3px);
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.25s ease, visibility 0.25s;
+      z-index: 999;
+    }
+    .cart-overlay.active {
+      opacity: 1; visibility: visible;
+    }
+
+    .cart-panel {
+      position: fixed;
+      top: 0; right: -100%;
+      width: 90%; max-width: 440px;
+      height: 100vh;
+      background: white;
+      box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+      padding: 2rem 1.5rem;
+      overflow-y: auto;
+      transition: right 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      z-index: 1000;
+      display: flex;
+      flex-direction: column;
+    }
+    .cart-overlay.active .cart-panel {
+      right: 0;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+    .cart-header h2 {
+      font-size: 1.8rem;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .close-cart {
+      background: none;
+      border: none;
+      font-size: 2rem;
+      line-height: 1;
+      cursor: pointer;
+      color: #555;
+      padding: 0 10px;
+    }
+    .close-cart:hover { color: #1E3A8A; }
+
+    .cart-items {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex: 1;
+    }
+    .cart-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8f7ff;
+      padding: 1rem 1rem;
+      border-radius: 30px;
+      gap: 8px;
+    }
+    .cart-product {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex: 2 1 200px;
+    }
+    .cart-product img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      border-radius: 8px;
+      background: white;
+    }
+    .cart-product-info h4 { 
+        font-size: 1rem; 
+        font-weight: 700; 
+    }
+    .cart-product-info p { 
+        font-size: 0.7rem; 
+        color: #666; 
+    }
+
+    .cart-qty {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: white;
+      padding: 0.1rem 0.2rem;
+      border-radius: 40px;
+      border: 1px solid #1E3A8A;
+    }
+    .cart-qty button {
+      background: none; 
+      border: none; 
+      width: 24px; 
+      height: 24px;
+      font-weight: bold; 
+      font-size: 1rem; 
+      color: #1E3A8A; 
+      cursor: pointer;
+    }
+    .cart-qty span { 
+        min-width: 20px; 
+        text-align: center; 
+        font-weight: 600; 
+    }
+    .cart-price { 
+        font-weight: 700; 
+        font-size: 1rem; 
+        min-width: 65px; 
+        text-align: right; 
+    }
+    .cart-remove { 
+        color: #999; 
+        cursor: pointer; 
+        padding: 4px; 
+    }
+    .cart-remove:hover { 
+        color: #ff4444; 
+    }
+
+    .cart-summary {
+      background: #f0f4fc;
+      padding: 1.2rem 1.5rem;
+      border-radius: 30px;
+      margin-top: 1rem;
+    }
+    .summary-row { 
+        display: flex; 
+        justify-content: space-between; 
+        font-weight: 600; 
+        margin-bottom: 8px; 
+    }
+    .total-amount { 
+        font-size: 1.8rem; 
+        font-weight: 800; 
+        color: #1E3A8A; 
+    }
+    .checkout-btn {
+      background: #1E3A8A; 
+      border: none; 
+      color: white; 
+      padding: 0.8rem 1.5rem;
+      border-radius: 60px; 
+      font-weight: 700; 
+      font-size: 1rem; 
+      width: 100%;
+      cursor: pointer; 
+      box-shadow: 0 4px 0 #0c1a45; 
+      transition: 0.1s; 
+      margin-top: 15px;
+    }
+    .checkout-btn:active { 
+        transform: translateY(3px); 
+        box-shadow: 0 1px 0 #0c1a45; 
+    }
+
+    /* ==== RESPONSIVE KEPT INTACT ==== */
+    @media (max-width:480px){
+      .d-right h2{
+        font-size:1.7rem;
+    }
+      .now{
+        font-size:1.9rem;
+    }
+      .action-row .btn-pri,.action-row .btn-sec{
+        flex:1;text-align:center;
+    }
+      .chip{
+        white-space:normal;
+        font-size:0.7rem;
+    }
+    }
+    @media (max-width: 768px) {
+      .navbar { 
+        flex-wrap: wrap; 
+        gap: 10px; 
+        justify-content: center; 
+    }
+      .nav-links { 
+        justify-content: center; 
+        gap: 1rem; 
+    }
+      .cart-icon { 
+        margin-top: 5px; 
+    }
+      .product-grid { 
+        grid-template-columns: repeat(2, 1fr); 
+    }
+      .detail-right h2 { 
+        font-size: 24px; 
+    }
+    }
+
+    /* ========== LARGE DESKTOP SCALE  ========== */
+    @media (min-width:1800px){
+      .navbar { 
+        max-width: 1800px; 
+        margin-left: auto; 
+        margin-right: auto; 
+        padding: 0.8rem 3%; 
+        border-radius: 4rem; 
+    }
+      .logo{
+        font-size: 1.9rem;
+    }
+      .nav-links a{
+        font-size: 1.2rem;
+    }
+      .cart-icon{
+        font-size: 1.2rem; 
+        padding:0.5rem 1.8rem; 
+        border-radius:4rem;
+    }
+
+      .detail-wrap{ 
+        max-width: 1800px; 
+        margin-left: auto; 
+        margin-right: auto; 
+        padding: 2rem 3%; 
+    }
+      .detail-card{ 
+        border-radius: 3rem; 
+    }
+      .d-left{ 
+        flex: 1 1 400px; 
+        padding: 2.5rem; 
+    }
+      .d-left img{ 
+        max-width: 360px; 
+        border-radius: 2.5rem; 
+    }
+      .d-right{ 
+        flex: 2 1 600px; 
+        padding: 2.5rem 3rem; 
+    }
+      .badge{ 
+        font-size: 0.9rem; 
+        padding: 0.3rem 1.4rem; 
+        margin-bottom: 1rem; 
+    }
+      .d-right h2{ 
+        font-size: 3.2rem; 
+    }
+      .sub{ 
+        font-size: 1.2rem; 
+        padding-bottom: 1rem; 
+        margin-bottom: 1.2rem; 
+    }
+      .chip{ 
+        font-size: 1rem; 
+        padding: 0.4rem 1.4rem; 
+        border-radius: 3rem;
+     }
+      .chip i{ 
+        font-size: 0.9rem; 
+        margin-right: 6px; 
+    }
+      .price-row{ 
+        margin: 1.8rem 0 1.2rem; 
+    }
+      .now{ 
+        font-size: 3.4rem; 
+    }
+      .old{ 
+        font-size: 1.6rem; 
+    }
+      .save{ 
+        font-size: 1rem; 
+        padding: 0.4rem 1.8rem; 
+    }
+      .action-row{
+         gap: 1.5rem; 
+         margin: 2rem 0; 
+        }
+      .qty button{ 
+        padding: 0.5rem 1.6rem; 
+        font-size: 1.8rem; 
+    }
+      .qty span{ 
+        font-size: 1.4rem; 
+        min-width: 2.4rem; 
+    }
+      .btn-pri{ 
+        font-size: 1.2rem; 
+        padding: 1rem 2.8rem; 
+        box-shadow: 0 6px 0 #0c1a45; 
+    }
+      .btn-sec{ 
+        font-size: 1.2rem; 
+        padding: 1rem 2.5rem; 
+        border-width: 3px; 
+    }
+      .spec-mini{ 
+        font-size: 1rem; 
+        padding: 1.5rem; 
+        border-radius: 2rem; 
+        gap: 1.2rem 2rem; 
+    }
+      .spec-mini div{ 
+        gap: 1.5rem; 
+    }
+      .spec-mini span:first-child{
+         min-width: 110px; 
+        }
+
+      .grid-wrap{ 
+        max-width: 1800px; 
+        margin-left: auto; 
+        margin-right: auto; 
+        padding: 2.5rem 3% 3rem; 
+    }
+      .grid{ 
+        gap: 1.5rem; 
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+     }
+      .card{ 
+        padding: 1.5rem 1.2rem; 
+        border-radius: 2rem; 
+    }
+      .card .img{ 
+        min-height: 120px; 
+    }
+      .card img{ 
+        max-width: 100px; 
+        max-height: 90px; 
+    }
+      .card h3{ 
+        font-size: 1.7rem; 
+    }
+      .card .price{ 
+        font-size: 1.9rem; 
+        margin: 0.5rem 0; 
+    }
+      .btn-sm{ 
+        font-size: 1.1rem; 
+        padding: 0.6rem 1.2rem; 
+        box-shadow: 0 4px 0 #cbd5e0; 
+    }
+
+      .footer{ 
+        max-width: 1800px; 
+        margin-left: auto; 
+        margin-right: auto; 
+        border-radius: 3rem 3rem 0 0; 
+        padding: 2rem 5% 1.5rem; 
+    }
+      .footer-grid{ 
+        font-size: 1.1rem; 
+    }
+      .social i{ 
+        font-size: 1.6rem; 
+        padding: 0.6rem; 
+        margin-right: 0.8rem; 
+    }
+    }
+    @media (min-width:2500px){
+      .navbar, 
+      .detail-wrap, 
+      .grid-wrap, 
+      .footer{ 
+        max-width: 2200px; 
+    }
+      .d-left img{ 
+        max-width: 420px; 
+    }
+      .d-right h2{ 
+        font-size: 4rem; 
+    }
+      .now{ 
+        font-size: 4rem; 
+    }
+    }
+  </style>
+</head>
+<body>
+
+<!-- overlay + sliding cart panel -->
+<div class="cart-overlay" id="cartOverlay">
+  <div class="cart-panel">
+    <div class="cart-header">
+      <h2><i class="fas fa-shopping-cart" style="color:#1E3A8A;"></i> Your Cart</h2>
+      <button class="close-cart" id="closeCartBtn">&times;</button>
+    </div>
+    <div class="cart-items" id="cartItemsContainer">
+      <!-- filled dynamically in js -->
+    </div>
+    <div class="cart-summary">
+      <div class="summary-row">
+        <span class="total-label">Subtotal</span>
+        <span class="total-amount" id="cartTotal">$0</span>
+      </div>
+      <div class="summary-row" style="font-size:0.9rem;">
+        <span>Shipping</span> <span>free</span>
+      </div>
+      <button class="checkout-btn" id="checkoutBtn"><i class="fas fa-lock"></i> Checkout</button>
+      <p style="font-size:0.7rem; margin-top:0.5rem; color:#666;">✨ Free shipping over $150</p>
+    </div>
+  </div>
+</div>
+
+
+<nav class="navbar">
+  <div class="logo">DUPLO·X</div>
+  <div class="nav-links">
+    <a href="index.html">home</a>
+    <a href="#toners">toners</a>
+    <a href="#detail">detail</a>
+    <a href="#contact">contact</a>
+  </div>
+  <span class="cart-icon" id="cartToggle"><i class="fas fa-cart-shopping"></i> 0</span>
+</nav>
+
+<!-- ========== DETAIL PAGE ========== -->
+<section id="detail" class="detail-wrap" style="scroll-margin-top:70px;">
+  <div class="detail-card">
+    <div class="d-left">
+      <img src="https://www.duplo.com/eng/products/duplicators/lib/img/dpe1050.png" alt="Duplo 724M toner">
+    </div>
+    <div class="d-right">
+      <span class="badge"><i class="fas fa-star" style="font-size:0.6rem;"></i> BESTSELLER</span>
+      <h2>DUPLO 724M</h2>
+      <div class="sub"><span>magenta · high yield</span> <span>🔔 2 left</span></div>
+      <div class="chip-box">
+        <span class="chip"><i class="fas fa-file"></i> 12k pages</span>
+        <span class="chip"><i class="fas fa-microchip"></i> smart chip</span>
+        <span class="chip"><i class="fas fa-paint-brush"></i> laser</span>
+        <span class="chip"><i class="fas fa-recycle"></i> eco</span>
+        <span class="chip"><i class="fas fa-box"></i> 600/700</span>
+        <span class="chip"><i class="fas fa-truck"></i> free</span>
+      </div>
+      <div class="price-row">
+        <span class="now">$109</span>
+        <span class="old">$149</span>
+        <span class="save">−27%</span>
+      </div>
+      <div class="action-row">
+        <div class="qty">
+          <button id="qtyMin">−</button>
+          <span id="qtyNum">1</span>
+          <button id="qtyPlus">+</button>
+        </div>
+        <button class="btn-pri" id="addDetail"><i class="fas fa-cart-shopping"></i> Add</button>
+        <button class="btn-sec"><i class="fas fa-heart"></i> Wish</button>
+      </div>
+      <div class="spec-mini">
+        <div><span>compat</span><span>600/700 series</span></div>
+        <div><span>yield</span><span>12,000 pages</span></div>
+        <div><span>color</span><span>magenta</span></div>
+        <div><span>shelf</span><span>24 months</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== PRODUCT GRID ========== -->
+<h2 id="toners" style="text-align:center;margin:1rem 0 0;font-size:1.5rem;">⬇ more toners ⬇</h2>
+<div class="grid-wrap">
+  <div class="grid">
+    <div class="card"><div class="img"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqyCZu9rFD3kMDo6JQZfGkxXKajhAKmRfEQ&s" alt="724BK"></div><h3>724BK</h3><p style="font-size:0.8rem;">black 20k</p><div class="price">$89</div><button class="btn-sm add-cart-btn" data-id="101" data-name="724BK" data-price="89" data-desc="black 20k" data-img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqyCZu9rFD3kMDo6JQZfGkxXKajhAKmRfEQ&s">add</button></div>
+    <div class="card"><div class="img"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqyCZu9rFD3kMDo6JQZfGkxXKajhAKmRfEQ&s" alt="color set"></div><h3>color set</h3><p style="font-size:0.8rem;">c/m/y/k</p><div class="price">$299</div><button class="btn-sm add-cart-btn" data-id="102" data-name="color set" data-price="299" data-desc="c/m/y/k" data-img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqyCZu9rFD3kMDo6JQZfGkxXKajhAKmRfEQ&s">add</button></div>
+    <div class="card"><div class="img"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqyCZu9rFD3kMDo6JQZfGkxXKajhAKmRfEQ&s" alt="Duplo 700i"></div><h3>700i pro</h3><p style="font-size:0.8rem;">printer</p><div class="price">$4,290</div><button class="btn-sm add-cart-btn" data-id="103" data-name="700i pro" data-price="4290" data-desc="printer" data-img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqyCZu9rFD3kMDo6JQZfGkxXKajhAKmRfEQ&s">inquire</button></div>
+    <div class="card"><div class="img"><img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqyCZu9rFD3kMDo6JQZfGkxXKajhAKmRfEQ&s" alt="waste"></div><h3>waste</h3><p style="font-size:0.8rem;">bottle</p><div class="price">$24</div><button class="btn-sm add-cart-btn" data-id="104" data-name="waste toner" data-price="24" data-desc="bottle" data-img="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcThqyCZu9rFD3kMDo6JQZfGkxXKajhAKmRfEQ&s">add</button></div>
+  </div>
+</div>
+
+<footer class="footer">
+  <div class="footer-grid">
+    <div><h3 style="font-size:1.8rem;">DUPLO·X</h3><p>premium toners</p></div>
+    <div><h4>shop</h4><p>toners</p><p>printers</p></div>
+    <div><h4>support</h4><p>faq</p><p>returns</p></div>
+    <div class="social"><i class="fab fa-instagram"></i><i class="fab fa-tiktok"></i><i class="fab fa-linkedin"></i></div>
+  </div>
+  <div style="text-align:center; margin-top:1.8rem; font-size:0.8rem;">© 2026 Duplo·X</div>
+</footer>
+
+<!-- ========== SCRIPT ========== -->
+<script>
+(function() {
+  // ----- CART STATE -----
+  let cartItems = [];  // start empty
+
+ 
+  const overlay = document.getElementById('cartOverlay');
+  const cartToggle = document.getElementById('cartToggle');
+  const closeBtn = document.getElementById('closeCartBtn');
+  const cartContainer = document.getElementById('cartItemsContainer');
+  const totalSpan = document.getElementById('cartTotal');
+  const cartIcon = document.querySelector('.cart-icon');
+
+  
+  function openCart() { overlay.classList.add('active'); }
+  function closeCart() { overlay.classList.remove('active'); }
+
+  cartToggle.addEventListener('click', openCart);
+  if (closeBtn) closeBtn.addEventListener('click', closeCart);
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) closeCart(); });
+
+  // ----- RENDER CART (from cartItems array) -----
+  function renderCart() {
+    if (!cartContainer) return;
+    cartContainer.innerHTML = '';
+    let total = 0;
+    cartItems.forEach(item => {
+      total += item.price * item.qty;
+      const row = document.createElement('div');
+      row.className = 'cart-row';
+      row.dataset.id = item.id;
+      row.innerHTML = `
+        <div class="cart-product">
+          <img src="${item.img}" alt="${item.name}">
+          <div class="cart-product-info">
+            <h4>${item.name}</h4>
+            <p>${item.desc || ''}</p>
+          </div>
+        </div>
+        <div class="cart-qty">
+          <button class="cart-qty-minus">−</button>
+          <span class="cart-qty-num">${item.qty}</span>
+          <button class="cart-qty-plus">+</button>
+        </div>
+        <div class="cart-price">$${item.price * item.qty}</div>
+        <div class="cart-remove"><i class="fas fa-trash"></i></div>
+      `;
+      cartContainer.appendChild(row);
+    });
+
+    totalSpan.innerText = '$' + total;
+    let itemCount = cartItems.reduce((acc, i) => acc + i.qty, 0);
+    cartIcon.innerHTML = `<i class="fas fa-cart-shopping"></i> ${itemCount}`;
+
+    // attach events to each row
+    document.querySelectorAll('.cart-row').forEach(row => {
+      const minus = row.querySelector('.cart-qty-minus');
+      const plus = row.querySelector('.cart-qty-plus');
+      const qtySpan = row.querySelector('.cart-qty-num');
+      const priceEl = row.querySelector('.cart-price');
+      const removeBtn = row.querySelector('.cart-remove');
+      const id = parseInt(row.dataset.id);
+      const item = cartItems.find(i => i.id === id);
+      if (!item) return;
+
+      minus.addEventListener('click', () => {
+        if (item.qty > 1) { item.qty--; } else { // remove if becomes 0? we allow min 1
+          
+        }
+        renderCart();
+      });
+      plus.addEventListener('click', () => {
+        item.qty++;
+        renderCart();
+      });
+      removeBtn.addEventListener('click', () => {
+        cartItems = cartItems.filter(i => i.id !== id);
+        renderCart();
+      });
+    });
+  }
+
+  // ----- ADD TO CART FUNCTION -----
+  function addToCart(product) {
+    // product = { id, name, price, desc, img }
+    const existing = cartItems.find(i => i.id === product.id);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      cartItems.push({ ...product, qty: 1 });
+    }
+    renderCart();
+    openCart();        // optional: open cart on add
+  }
+
+  // ----- ATTACH TO ALL "ADD" BUTTONS (grid items) -----
+  document.querySelectorAll('.add-cart-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const id = parseInt(btn.dataset.id);
+      const name = btn.dataset.name;
+      const price = parseInt(btn.dataset.price);
+      const desc = btn.dataset.desc || '';
+      const img = btn.dataset.img || '';
+      addToCart({ id, name, price, desc, img });
+    });
+  });
+
+  // ----- DETAIL PAGE ADD BUTTON (id=addDetail) -----
+  const detailAdd = document.getElementById('addDetail');
+  if (detailAdd) {
+    detailAdd.addEventListener('click', () => {
+      // get qty 
+      let qty = parseInt(document.getElementById('qtyNum')?.innerText || '1');
+      const product = {
+        id: 2,   
+        name: 'DUPLO 724M',
+        price: 109,
+        desc: 'magenta · high yield',
+        img: 'https://www.duplo.com/eng/products/duplicators/lib/img/dpe1050.png'
+      };
+      
+      for(let i=0; i<qty; i++) {
+        const existing = cartItems.find(p => p.id === product.id);
+        if (existing) existing.qty += 1;
+        else cartItems.push({ ...product, qty: 1 });
+      }
+      renderCart();
+      openCart();
+    });
+  }
+
+  // ----- DETAIL PAGE QUANTITY BUTTONS -----
+  const qtySpan = document.getElementById('qtyNum');
+  const minBtn = document.getElementById('qtyMin');
+  const plusBtn = document.getElementById('qtyPlus');
+  if (qtySpan && minBtn && plusBtn) {
+    minBtn.addEventListener('click', () => { let v = parseInt(qtySpan.innerText); if (v>1) qtySpan.innerText = v-1; });
+    plusBtn.addEventListener('click', () => { let v = parseInt(qtySpan.innerText); qtySpan.innerText = v+1; });
+  }
+
+  // initial render if cart empty
+  renderCart();
+
+  // close cart on checkout (demo)
+  document.getElementById('checkoutBtn')?.addEventListener('click', () => {
+    alert('Thank you for shopping! (Demo)');
+    // optionally clear cart
+    // cartItems = []; renderCart();
+    closeCart();
+  });
+
+})();
+</script>
+</body>
+</html>
